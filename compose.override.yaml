@@ -1,0 +1,66 @@
+services:
+  api:
+    environment:
+      MLFLOW_TRACKING_URI: http://mlflow:5000
+      MLFLOW_HTTP_REQUEST_TIMEOUT: '5'
+      MLFLOW_HTTP_REQUEST_MAX_RETRIES: '0'
+      OMP_NUM_THREADS: '2'
+      OPENBLAS_NUM_THREADS: '2'
+  mlflow:
+    image: ghcr.io/mlflow/mlflow:v2.22.0
+    command:
+      - mlflow
+      - server
+      - --host
+      - "0.0.0.0"
+      - --port
+      - "5000"
+      - --backend-store-uri
+      - sqlite:////mlflow-data/registro.db
+      - --serve-artifacts
+      - --artifacts-destination
+      - /mlflow-data/artifacts
+    ports:
+      - "127.0.0.1:5000:5000"
+    volumes:
+      - datos_mlflow:/mlflow-data
+
+  postgres-airflow:
+    image: postgres:16.10
+    environment:
+      POSTGRES_DB: airflow
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: ${AIRFLOW_DB_PASSWORD:?Falta AIRFLOW_DB_PASSWORD en .env}
+    volumes:
+      - datos_postgres_airflow:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-h", "127.0.0.1", "-U", "airflow", "-d", "airflow"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  airflow:
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
+    command: standalone
+    environment:
+      AIRFLOW__CORE__EXECUTOR: LocalExecutor
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_USERS: "admin:admin"
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:${AIRFLOW_DB_PASSWORD:?Falta AIRFLOW_DB_PASSWORD en .env}@postgres-airflow:5432/airflow
+    ports:
+      - "127.0.0.1:8081:8080"
+    volumes:
+      - datos_airflow:/opt/airflow
+      - ./dags:/opt/airflow/dags:ro
+      - ./scripts:/opt/novamercado/scripts:ro
+      - ./data/raw:/opt/novamercado/data/raw:ro
+    depends_on:
+      postgres-airflow:
+        condition: service_healthy
+
+volumes:
+  datos_mlflow:
+  datos_postgres_airflow:
+  datos_airflow:

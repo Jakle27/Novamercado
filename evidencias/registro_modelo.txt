@@ -1,0 +1,12 @@
+Filas de entrenamiento: 76,332
+Filas de calibración: 3,360
+Filas de evaluación: 3,360
+Referencia semanal: MAE=59.43 | costo total=143,625.60
+HistGradientBoosting: MAE=39.92 | costo total=101,591.00
+🏃 View run HistGradientBoosting - febrero 2026 at: http://mlflow:5000/#/experiments/1/runs/886adcfc47a9476f892559e31bcb8ce8
+🧪 View experiment at: http://mlflow:5000/#/experiments/1
+Modelo registrado: novamercado-pronostico
+Alias: vigente
+Versión: 1
+MAE: 39.92
+Costo total: 101,591.00

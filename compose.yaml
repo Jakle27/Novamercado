@@ -1,0 +1,35 @@
+services:
+  api:
+    build: .
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - ./data/raw:/datos:ro
+    environment:
+      NOVAMERCADO_DATOS: /datos
+      PGHOST: postgres-producto
+      PGDATABASE: ${POSTGRES_DB:?Falta POSTGRES_DB en .env}
+      PGUSER: ${POSTGRES_USER:?Falta POSTGRES_USER en .env}
+      PGPASSWORD: ${POSTGRES_PASSWORD:?Falta POSTGRES_PASSWORD en .env}
+    depends_on:
+      postgres-producto:
+        condition: service_healthy
+
+  postgres-producto:
+    image: postgres:16.10
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?Falta POSTGRES_DB en .env}
+      POSTGRES_USER: ${POSTGRES_USER:?Falta POSTGRES_USER en .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Falta POSTGRES_PASSWORD en .env}
+    volumes:
+      - datos_producto:/var/lib/postgresql/data
+      - ./db/01-producto.sql:/docker-entrypoint-initdb.d/01-producto.sql:ro
+      - ./db/02-predicciones.sql:/docker-entrypoint-initdb.d/02-predicciones.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+volumes:
+  datos_producto:
