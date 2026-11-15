@@ -19,20 +19,47 @@ def enviar_pronostico(tienda_id, promocion):
     )
 
 
-def test_pronostico_valido_llega_al_servicio():
+@pytest.fixture
+def prediccion_de_prueba(monkeypatch):
+    def pronosticar(solicitud):
+        assert solicitud.tienda_id == 5
+        assert solicitud.familias[0].en_promocion == 8
+        return "1", [{
+            "familia_id": "bebidas",
+            "venta_esperada": 1200.0,
+            "cantidad_sugerida": 1300,
+        }]
+
+    def guardar(solicitud, datos_originales, respuesta):
+        assert respuesta["version_modelo"] == "1"
+        return 42
+
+    monkeypatch.delenv("NOVAMERCADO_DATOS", raising=False)
+    monkeypatch.setattr("app.main.pronosticar", pronosticar)
+    monkeypatch.setattr("app.main.guardar_prediccion", guardar)
+
+
+def test_pronostico_valido_llega_al_servicio(prediccion_de_prueba):
     respuesta = enviar_pronostico(5, 8)
 
-    assert respuesta.status_code == 503
-    assert respuesta.json()["calidad"] == {
-        "estado": "ok",
-        "observaciones": [],
-    }
+    assert respuesta.status_code == 200
+    datos = respuesta.json()
+    assert datos["tienda_id"] == 5
+    assert datos["fecha"] == "2025-11-17"
+    assert datos["version_modelo"] == "1"
+    assert datos["id_prediccion"] == 42
+    assert datos["predicciones"] == [{
+        "familia_id": "bebidas",
+        "venta_esperada": 1200.0,
+        "cantidad_sugerida": 1300,
+    }]
+    assert datos["calidad"] == {"estado": "ok", "observaciones": []}
 
 
-def test_pronostico_repara_y_registra_los_cambios():
+def test_pronostico_repara_y_registra_los_cambios(prediccion_de_prueba):
     respuesta = enviar_pronostico("5", "8")
 
-    assert respuesta.status_code == 503
+    assert respuesta.status_code == 200
     calidad = respuesta.json()["calidad"]
     assert calidad["estado"] == "corregido"
     assert [

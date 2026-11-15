@@ -1,4 +1,4 @@
 FROM apache/airflow:3.1.0-python3.11
 RUN python -m venv /home/airflow/entorno-modelo \
     && /home/airflow/entorno-modelo/bin/python -m pip install \
-       --no-cache-dir scikit-learn==1.6.1
+       --no-cache-dir scikit-learn==1.6.1 mlflow==2.22.0 psycopg2-binary==2.9.10 SQLAlchemy==2.0.41

@@ -1,0 +1,23 @@
+curl: (56) Recv failure: Connection reset by peer
+curl: (56) Recv failure: Connection reset by peer
+curl: (22) The requested URL returned error: 503
+curl: (22) The requested URL returned error: 503
+curl: (22) The requested URL returned error: 503
+curl: (22) The requested URL returned error: 503
+curl: (22) The requested URL returned error: 503
+curl: (22) The requested URL returned error: 503
+curl: (22) The requested URL returned error: 503
+curl: (22) The requested URL returned error: 503
+curl: (22) The requested URL returned error: 503
+{"nombre":"novamercado-pronostico","alias":"vigente","version":"1"}
+dag_id                 | is_paused
+=======================+==========
+reentrenar_novamercado | True     
+                                  
+Modelo inicial: 1
+Datos simulados guardados en PostgreSQL: 1800 ventas en 15 fechas.
+Disparo HTTP 202: manual__2026-11-15T02:31:21.647317+00:00_uNNrnGNS
+Resultado del DAG: {"estado": "exitoso", "promovido": true, "version": "2", "motivo": "El candidato redujo el costo y mantuvo o mejoró el MAE."}
+Pronóstico HTTP 200 con la versión 2 promovida por el DAG.
+Tiempo desde que se observó el DAG exitoso: 6.1 s.
+Prueba integrada exitosa. La API conservó el mismo contenedor y hora de inicio.

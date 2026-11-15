@@ -1,0 +1,4 @@
+Salud integrada: {'estado': 'ok'}
+Tiempo hasta confirmar salud, sin construcción: 30 segundos
+Modelo inicial activo: {'nombre': 'novamercado-pronostico', 'alias': 'vigente', 'version': '1'}
+Pronóstico integrado HTTP 200: {'tienda_id': 5, 'fecha': '2026-03-01', 'version_modelo': '1', 'predicciones': [{'familia_id': 'bebidas', 'venta_esperada': 1390.3654934270442, 'cantidad_sugerida': 1502}], 'calidad': {'estado': 'advertencia', 'observaciones': [{'campo': 'familias', 'accion': 'advertir', 'detalle': 'Se procesan solo las familias enviadas. Faltan: abarrotes, bebe, carnes, cuidado_personal, frutas_verduras, lacteos, licores, limpieza, mascotas, panaderia, snacks'}]}, 'id_prediccion': 1}

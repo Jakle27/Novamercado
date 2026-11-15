@@ -1,0 +1,2 @@
+{"timestamp":"2026-11-15T01:52:49.352815Z","level":"info","event":"Ventas nuevas aptas para reentrenamiento: 0","logger":"task.stdout"}
+{"timestamp":"2026-11-15T01:52:50.487439Z","level":"info","event":"Done. Returned value was: {'promovido': False, 'motivo': 'Sin ventas nuevas aptas. Se conserva el modelo vigente.'}","logger":"airflow.task.operators.airflow.providers.standard.decorators.python._PythonDecoratedOperator","filename":"python.py","lineno":218}

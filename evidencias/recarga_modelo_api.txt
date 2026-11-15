@@ -1,0 +1,5 @@
+Antes del cambio: {'nombre': 'novamercado-pronostico', 'alias': 'vigente', 'version': '1'}
+Alias del registro temporal actualizado a versión 2.
+Después del cambio: {'nombre': 'novamercado-pronostico', 'alias': 'vigente', 'version': '2'}
+Pronóstico HTTP 200 con versión 2. ID: 1
+API sin reinicio. Verificación completada en 15 segundos.

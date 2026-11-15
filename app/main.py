@@ -1,3 +1,4 @@
+import json
 from urllib.request import urlopen
 import logging
 from contextlib import asynccontextmanager
@@ -94,6 +95,24 @@ def health():
     except (OSError, ValueError):
         motivos.append("MLflow no está disponible")
 
+    airflow = os.environ.get("AIRFLOW_INTERNO", "http://airflow:8080")
+    try:
+        with urlopen(
+            f"{airflow.rstrip('/')}/api/v2/monitor/health", timeout=3
+        ) as respuesta:
+            estado_airflow = json.load(respuesta)
+
+        for componente, nombre in (
+            ("metadatabase", "base de metadatos"),
+            ("scheduler", "planificador"),
+            ("dag_processor", "procesador de DAGs"),
+        ):
+            detalle = estado_airflow.get(componente) or {}
+            if detalle.get("status") != "healthy":
+                motivos.append(f"Airflow: {nombre} no disponible")
+    except (OSError, ValueError):
+        motivos.append("Airflow no está disponible")
+
     if motivos:
         return {"estado": "degradado", "motivo": ". ".join(motivos)}
     return {"estado": "ok"}
@@ -164,3 +183,8 @@ def observaciones(datos: Annotated[dict, Body()]):
         raise HTTPException(status_code=503, detail="PostgreSQL no está disponible") from error
 
     return {"registros_guardados": guardados, "calidad": calidad}
+
+
+from app.administracion import router as router_administracion
+
+app.include_router(router_administracion)
