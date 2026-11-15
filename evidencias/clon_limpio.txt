@@ -1,0 +1,6 @@
+Commit probado: 9a2654b
+Salud del clon: {'estado': 'ok'}
+Modelo inicial: {'nombre': 'novamercado-pronostico', 'alias': 'vigente', 'version': '1'}
+Disparo HTTP 202: manual__2026-11-15T02:37:13.498810+00:00_gSQHwLCq
+Resultado del DAG: {'estado': 'exitoso', 'promovido': False, 'version': '1', 'motivo': 'Sin ventas nuevas aptas. Se conserva el modelo vigente.'}
+Clon limpio verificado. El DAG se ejecutó sin activarlo manualmente.
