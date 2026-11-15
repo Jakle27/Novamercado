@@ -1,8 +1,8 @@
-# NovaMercado — Laboratorio 2 de Product Development
+# NovaMercado — Laboratorio 2
 
 Servicio de pronóstico diario de ventas y recomendación de inventario por tienda y familia.
 
-## Instalación desde un clon limpio
+## Instalación
 
 1. Abra Docker Desktop y ejecute los comandos desde la raíz del repositorio en Ubuntu con WSL.
 2. Coloque `tiendas.csv`, `familias.csv`, `historico_ventas.csv`, `feriados.csv` y `costos.csv`, entregados en el GES, directamente en `data/raw/`.
